@@ -1,0 +1,23 @@
+{
+  "name": "ai/devs",
+  "description": "AI_devs",
+  "license": "VG-License",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "authors": [
+    {
+      "name": "Jakub Książek",
+      "email": "jakub_ksiazek@o2.pl",
+      "role": "Owner"
+    }
+  ],
+  "require": {
+    "php": "^8.2",
+    "ext-curl": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Main\\": "tasks/"
+    }
+  }
+}
