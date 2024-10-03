@@ -14,14 +14,15 @@ class Request
 
     public function post(): string
     {
-        $config = file_get_contents('config/local.config.php');
+        // @todo: prepare simple DI container and inject config
+        $config = require('config/local.config.php');
 
         $curlHandle = curl_init(self::DESTINATION);
         curl_setopt($curlHandle, CURLOPT_POST, true);
         curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curlHandle, CURLOPT_POSTFIELDS, json_encode([
             'task' => $this->task,
-            'apikey' => $config['apikey'],
+            'apikey' => $config['api_key'],
             'answer' => $this->data,
         ]));
 
