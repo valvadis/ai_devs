@@ -1,4 +1,4 @@
-export class poligonRequest {
+export class Message {
     public task: string
     public apikey: string
     public answer: string[]

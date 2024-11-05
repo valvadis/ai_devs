@@ -1,6 +1,6 @@
 import axios, {AxiosResponse} from 'axios';
 import {readFileSync} from 'node:fs';
-import {poligonRequest} from './request.js';
+import {Message} from './model.js';
 
 const config: {[index: string]: string} = JSON.parse(readFileSync('./config/config.json', 'utf-8'));
 const source: string = 'https://poligon.aidevs.pl/dane.txt';
@@ -11,13 +11,13 @@ const result: string[] = await axios.get(source)
         return response.data.trim().split('\n')
     })
 
-const request = new poligonRequest(
+const message = new Message(
     'POLIGON',
     config['auth_token'],
     result
 )
 
-axios.post(destination, request)
+axios.post(destination, message)
   .then((response: AxiosResponse) => {
       console.log('Response:', response.data);
   })

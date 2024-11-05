@@ -28,6 +28,13 @@ const captchaCompletion = await openai.chat.completions.create({
     ],
 });
 
-const answer: string|null = captchaCompletion.choices[0].message.content;
+const answer: number = Number(captchaCompletion.choices[0].message.content?.trim());
 
-console.log(question, answer);
+axios({
+    method: "post",
+    url: 'https://xyz.ag3nts.org',
+    data: { username: 'tester', password: '574e112a', answer: answer },
+    headers: { "Content-Type": "multipart/form-data" },
+}).then((response: AxiosResponse) => {
+    console.log(response.data);
+})
