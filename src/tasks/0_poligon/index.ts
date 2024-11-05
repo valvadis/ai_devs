@@ -1,10 +1,9 @@
 import axios, {AxiosResponse} from 'axios';
-import {readFileSync} from 'node:fs';
 import {Message} from './model.js';
+import {Config} from '../../service/config.js';
 
-const config: {[index: string]: string} = JSON.parse(readFileSync('./config/config.json', 'utf-8'));
-const source: string = 'https://poligon.aidevs.pl/dane.txt';
-const destination: string = 'https://poligon.aidevs.pl/verify';
+const source: string = Config.get('poligon_endpoint') + '/dane.txt';
+const destination: string = Config.get('poligon_endpoint') + '/verify';
 
 const result: string[] = await axios.get(source)
     .then((response: AxiosResponse) => {
@@ -13,7 +12,7 @@ const result: string[] = await axios.get(source)
 
 const message = new Message(
     'POLIGON',
-    config['auth_token'],
+    Config.get('auth_token'),
     result
 )
 

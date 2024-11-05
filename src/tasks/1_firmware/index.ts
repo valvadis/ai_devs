@@ -1,10 +1,13 @@
 import OpenAI from "openai";
 import axios, {AxiosResponse} from 'axios';
 import {askAboutQuestion, proveYouAreNotHuman} from "./prompt.js";
+import {Config} from '../../service/config.js';
+import {ChatCompletion} from "openai/src/resources/chat/completions";
 
 const openai = new OpenAI();
+const endpoint = Config.get('xyz_endpoint');
 
-const webpageCompletion: any = await axios.get('https://xyz.ag3nts.org/')
+const webpageCompletion: ChatCompletion = await axios.get(endpoint)
     .then((response: AxiosResponse) => {
         return openai.chat.completions.create({
             model: "gpt-4o-mini",
@@ -15,7 +18,7 @@ const webpageCompletion: any = await axios.get('https://xyz.ag3nts.org/')
         });
     });
 
-const question: string = webpageCompletion.choices[0].message.content;
+const question: string = webpageCompletion.choices[0].message.content ?? "";
 
 const captchaCompletion = await openai.chat.completions.create({
     model: "gpt-4o-mini",
@@ -32,7 +35,7 @@ const answer: number = Number(captchaCompletion.choices[0].message.content?.trim
 
 axios({
     method: "post",
-    url: 'https://xyz.ag3nts.org',
+    url: endpoint,
     data: { username: 'tester', password: '574e112a', answer: answer },
     headers: { "Content-Type": "multipart/form-data" },
 }).then((response: AxiosResponse) => {
