@@ -1,1 +1,4 @@
-config/local.config.php
+node_modules
+config/config.json
+build/*
+!build/.gitkeep
