@@ -1,37 +1,26 @@
-import OpenAI from "openai";
+import { Chat } from "../../service/chat.js";
 import axios, { AxiosResponse } from 'axios';
 import { askAboutQuestion, proveYouAreNotHuman } from "./prompt.js";
 import { Config } from '../../service/config.js';
-import { ChatCompletion } from "openai/src/resources/chat/completions";
 
-const openai = new OpenAI();
+const chat = new Chat();
 const endpoint = Config.get('xyz');
 
-const webpageCompletion: ChatCompletion = await axios.get(endpoint)
+const question: string = await axios.get(endpoint)
     .then(({data}: AxiosResponse) => {
-        return openai.chat.completions.create({
-            model: "gpt-4o-mini",
-            messages: [
-                { role: "system", content: askAboutQuestion },
-                { role: "user", content: data }
-            ],
-        });
+        return chat.send([
+            { role: "system", content: askAboutQuestion },
+            { role: "user", content: data }
+        ]);
     });
 
-const question: string = webpageCompletion.choices[0].message.content ?? "";
-
-const captchaCompletion = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
-    messages: [
-        { role: "system", content: proveYouAreNotHuman },
-        {
-            role: "user",
-            content: question,
-        },
-    ],
-});
-
-const answer: number = Number(captchaCompletion.choices[0].message.content?.trim());
+const answer: number = Number(chat.send([
+    { role: "system", content: proveYouAreNotHuman },
+    {
+        role: "user",
+        content: question,
+    },
+]));
 
 axios({
     method: "post",

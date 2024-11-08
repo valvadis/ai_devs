@@ -1,17 +1,14 @@
-import axios, {AxiosError, AxiosResponse} from 'axios';
-import OpenAI from "openai";
+import axios, { AxiosError, AxiosResponse } from 'axios';
+import { Chat } from "../../service/chat.js";
 import { Message } from './model.js';
 import { answerPrompt } from "./prompt.js";
 import { Config } from "../../service/config.js";
-import { ChatCompletion } from "openai/src/resources/chat/completions";
 
-const openai = new OpenAI();
+const chat = new Chat();
 const destination: string = Config.get('xyz') + '/verify ';
 const regex = /\{\{FLG:.*?}}/;
 
-let message: Message = new Message(0, 'READY')
-let reply: ChatCompletion;
-
+let message: Message = new Message(0, 'READY');
 for (let i = 0; i < 5; i++) {
     message = await axios.post(destination, message)
         .then(({ data: { msgID, text }}: AxiosResponse) => {
@@ -26,17 +23,8 @@ for (let i = 0; i < 5; i++) {
         break;
     }
 
-    reply = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
-        messages: [
-            { role: "system", content: answerPrompt },
-            { role: "user", content: message.text }
-        ],
-    });
-
-    if (reply.choices[0].message.content === undefined || reply.choices[0].message.content === null) {
-        throw new Error("No content in the response");
-    }
-
-    message.text = reply.choices[0].message.content;
+    message.text = await chat.send([
+        {role: "system", content: answerPrompt},
+        {role: "user", content: message.text}
+    ]);
 }

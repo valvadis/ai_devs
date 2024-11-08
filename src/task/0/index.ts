@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
-import { Message } from '../../model/poligon.js';
 import { Config } from '../../service/config.js';
+import { Message } from '../../service/poligon.js';
 
 const source: string = Config.get('poligon') + '/dane.txt';
 const destination: string = Config.get('poligon') + '/verify';
