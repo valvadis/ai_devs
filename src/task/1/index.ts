@@ -1,19 +1,19 @@
 import OpenAI from "openai";
-import axios, {AxiosResponse} from 'axios';
-import {askAboutQuestion, proveYouAreNotHuman} from "./prompt.js";
-import {Config} from '../../service/config.js';
-import {ChatCompletion} from "openai/src/resources/chat/completions";
+import axios, { AxiosResponse } from 'axios';
+import { askAboutQuestion, proveYouAreNotHuman } from "./prompt.js";
+import { Config } from '../../service/config.js';
+import { ChatCompletion } from "openai/src/resources/chat/completions";
 
 const openai = new OpenAI();
-const endpoint = Config.get('xyz_endpoint');
+const endpoint = Config.get('xyz');
 
 const webpageCompletion: ChatCompletion = await axios.get(endpoint)
-    .then((response: AxiosResponse) => {
+    .then(({data}: AxiosResponse) => {
         return openai.chat.completions.create({
             model: "gpt-4o-mini",
             messages: [
                 { role: "system", content: askAboutQuestion },
-                { role: "user", content: response.data }
+                { role: "user", content: data }
             ],
         });
     });
@@ -38,6 +38,6 @@ axios({
     url: endpoint,
     data: { username: 'tester', password: '574e112a', answer: answer },
     headers: { "Content-Type": "multipart/form-data" },
-}).then((response: AxiosResponse) => {
-    console.log(response.data);
+}).then(({data}: AxiosResponse) => {
+    console.log(data);
 })

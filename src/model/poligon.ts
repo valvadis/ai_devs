@@ -3,7 +3,7 @@ export class Message {
     public apikey: string
     public answer: string[]
 
-    constructor(task: string, apikey: string, answer: string[]) {
+    constructor(task: string, apikey: string, answer: any) {
         this.task = task
         this.apikey = apikey
         this.answer = answer
