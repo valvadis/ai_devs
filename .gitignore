@@ -2,4 +2,6 @@
 config/config.json
 build/*
 !build/.gitkeep
+data/*
+!data/.gitkeep
 node_modules

@@ -6,7 +6,7 @@ export class Chat {
 
     public async send(messages: ChatCompletionMessageParam[]): Promise<string> {
         const completion = await this.openai.chat.completions.create({
-            model: "gpt-4o-mini",
+            model: "gpt-4o",
             messages: messages,
         });
 
@@ -15,6 +15,10 @@ export class Chat {
         }
 
         return completion.choices[0].message.content;
+    }
+
+    public getOpenai(): OpenAI {
+        return this.openai;
     }
 }
 

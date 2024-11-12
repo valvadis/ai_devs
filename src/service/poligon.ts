@@ -27,6 +27,7 @@ export class Poligon {
             })
             .catch((error: AxiosError) => {
                 console.error('Error:', error.message);
+                console.error('Error:', error.response?.data);
             });
     }
 }
