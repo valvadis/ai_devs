@@ -1,8 +1,8 @@
-import axios, {AxiosError, AxiosResponse} from "axios";
+import axios, { AxiosResponse } from "axios";
 import OpenAI from "openai";
 import { Config } from "../../service/config.js";
 import { generateImage } from "./prompt.js";
-import {Poligon} from "../../service/poligon.js";
+import { Poligon } from "../../service/poligon.js";
 
 const domain: string = Config.get('centrala');
 const apikey: string = Config.get('auth_token');
@@ -12,6 +12,8 @@ const recording: string = await axios.get(source)
     .then(({ data: { description } }: AxiosResponse) => {
         return description;
     })
+
+console.log(recording);
 
 const response = await (new OpenAI()).images.generate({
     model: "dall-e-3",

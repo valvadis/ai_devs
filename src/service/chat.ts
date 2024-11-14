@@ -1,11 +1,11 @@
 import OpenAI from "openai";
-import { ChatCompletionMessageParam } from "openai/src/resources/chat/completions";
+import {ChatCompletion, ChatCompletionMessageParam} from "openai/src/resources/chat/completions";
 
 export class Chat {
     protected openai = new OpenAI();
 
     public async send(messages: ChatCompletionMessageParam[]): Promise<string> {
-        const completion = await this.openai.chat.completions.create({
+        const completion: ChatCompletion = await this.openai.chat.completions.create({
             model: "gpt-4o",
             messages: messages,
         });

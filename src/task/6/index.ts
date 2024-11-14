@@ -1,15 +1,15 @@
-import fs, {ReadStream} from "fs";
+import fs, { ReadStream } from "fs";
 import { Chat } from "../../service/chat.js";
 import { Config } from "../../service/config.js";
 import { Transcription } from "openai/src/resources/audio/transcriptions";
 import { streetNameSearch } from "../6/prompt.js";
-import {Poligon} from "../../service/poligon.js";
+import { Poligon } from "../../service/poligon.js";
 
 const chat = new Chat();
 const pathToCache = Config.getDirname() + "/../../data/cache/"
 const pathToRecordings = Config.getDirname() + "/../../data/recordings/"
 
-const recordings = fs.readdirSync(pathToRecordings);
+const recordings: string[] = fs.readdirSync(pathToRecordings);
 const recordingTranscriptions: string[] = [];
 for (const record of recordings) {
     const cachedRecord = pathToCache + record.substring(0, record.lastIndexOf(".")) + ".txt";
