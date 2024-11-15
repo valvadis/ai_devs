@@ -30,5 +30,12 @@ export class Poligon {
                 console.error('Error:', error.response?.data);
             });
     }
+
+    public static extractDataFromTags(input: string): string | null {
+        const regex: RegExp = /<RESULT>(.*?)<\/RESULT>/s;
+        const match: string[]|null = input.match(regex);
+
+        return match ? match[1].trim() : null;
+    }
 }
 

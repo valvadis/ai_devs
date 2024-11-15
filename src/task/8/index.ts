@@ -13,8 +13,6 @@ const recording: string = await axios.get(source)
         return description;
     })
 
-console.log(recording);
-
 const response = await (new OpenAI()).images.generate({
     model: "dall-e-3",
     prompt: generateImage(recording),

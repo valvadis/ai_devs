@@ -3,6 +3,7 @@ import fs, {ReadStream} from "fs";
 import {Transcription} from "openai/src/resources/audio/transcriptions";
 import {Buffer} from "buffer";
 import {ChatCompletion} from "openai/src/resources/chat/completions";
+import {Config} from "./config.js";
 
 interface FormatStrategy {
     read(path: string): Promise<string>;
@@ -10,7 +11,7 @@ interface FormatStrategy {
 
 class TextFormat implements FormatStrategy {
     public async read(path: string): Promise<string> {
-        console.log(path);
+
         return new Promise((resolve, reject) => {
             fs.readFile(path, 'utf8', (err, data) => {
                 if (err) {
@@ -29,7 +30,7 @@ class ImageFormat implements FormatStrategy {
             model: "gpt-4o",
             messages: [
                 { role: "user", content: [
-                        { "type": "image_url", "image_url": { "url": "data:image/jpeg;base64," +  base64_encode(path)} },
+                        { "type": "image_url", "image_url": { "url": "data:image/png;base64," +  base64_encode(path)} },
                     ]},
                 { role: "user", content: "Describe exactly this picture" },
             ],
@@ -43,7 +44,7 @@ class ImageFormat implements FormatStrategy {
     }
 }
 
-class SoundFormat implements FormatStrategy {
+class AudioFormat implements FormatStrategy {
     public async read(path: string): Promise<string> {
         const audioFile: ReadStream = fs.createReadStream(path)
         const transcription: Transcription = await (new OpenAI()).audio.transcriptions.create({
@@ -58,26 +59,38 @@ class SoundFormat implements FormatStrategy {
 export class FileAnalyzer {
     private strategies = new Map<string, FormatStrategy>();
 
+    private pathToCache = Config.getDirname() + "/../../data/cache/";
+
     constructor() {
         this.strategies.set("txt", new TextFormat());
         this.strategies.set("png", new ImageFormat());
-        this.strategies.set("mp3", new SoundFormat());
+        this.strategies.set("mp3", new AudioFormat());
     }
 
-    public async read(path: string): Promise<string> {
-        const extension = path.split(".").pop();
+    public async read(path: string, filename: string): Promise<string> {
+        const cachedRecord = this.pathToCache + filename.substring(0, filename.lastIndexOf(".")) + ".txt";
 
-        if (extension === undefined) {
+        if (fs.existsSync(cachedRecord)) {
+            return fs.readFileSync(cachedRecord, 'utf8');
+        }
+
+        const fileExtension = filename.split(".").pop();
+
+        if (fileExtension === undefined) {
             throw new Error("Path not lead to proper file (no extension)");
         }
 
-        const strategy = this.strategies.get(extension);
+        const strategy = this.strategies.get(fileExtension);
 
         if (strategy === undefined) {
             throw new Error("No strategy for the file format");
         }
 
-        return strategy.read(path);
+        const content: string = await strategy.read(path + filename);
+
+        fs.writeFileSync(cachedRecord, content);
+
+        return content;
     }
 }
 

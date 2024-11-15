@@ -1,12 +1,11 @@
-import { Config } from "../../service/config.js";
-import { FileAnalyzer } from "./strategy.js";
-import { Poligon } from "../../service/poligon.js";
-import { Chat } from "../../service/chat.js";
 import fs from "fs";
+import { Config } from "../../service/config.js";
+import { Chat } from "../../service/chat.js";
+import { FileAnalyzer } from "../../service/strategy.js";
+import { Poligon } from "../../service/poligon.js";
 import { categorizeFile } from "../9/prompt.js";
 
 const chat = new Chat();
-const pathToCache = Config.getDirname() + "/../../data/cache/";
 const pathToFiles = Config.getDirname() + "/../../data/factory/";
 
 const fileAnalyzer = new FileAnalyzer();
@@ -16,15 +15,8 @@ const sourceData: {people: string[], hardware: string[]} = {
 };
 
 for (const file of fs.readdirSync(pathToFiles)) {
-    const cachedRecord = pathToCache + file.substring(0, file.lastIndexOf(".")) + ".txt";
+    const text = await fileAnalyzer.read(pathToFiles, file);
 
-    if (!fs.existsSync(cachedRecord)) {
-        const content = await fileAnalyzer.read(pathToFiles + file);
-
-        fs.writeFileSync(cachedRecord, content);
-    }
-
-    const text: string = fs.readFileSync(cachedRecord, 'utf8');
     const result: string = await chat.send([
         { role: "system", content: categorizeFile(text) }
     ]);
@@ -36,5 +28,4 @@ for (const file of fs.readdirSync(pathToFiles)) {
     }
 }
 
-console.log(sourceData);
 (new Poligon()).sendReport('kategorie', sourceData);

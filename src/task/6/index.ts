@@ -1,30 +1,18 @@
-import fs, { ReadStream } from "fs";
-import { Chat } from "../../service/chat.js";
+import fs from "fs";
 import { Config } from "../../service/config.js";
-import { Transcription } from "openai/src/resources/audio/transcriptions";
-import { streetNameSearch } from "../6/prompt.js";
+import { Chat } from "../../service/chat.js";
+import { FileAnalyzer } from "../../service/strategy.js";
 import { Poligon } from "../../service/poligon.js";
+import { streetNameSearch } from "../6/prompt.js";
 
 const chat = new Chat();
-const pathToCache = Config.getDirname() + "/../../data/cache/"
+const fileAnalyzer = new FileAnalyzer();
 const pathToRecordings = Config.getDirname() + "/../../data/recordings/"
 
 const recordings: string[] = fs.readdirSync(pathToRecordings);
 const recordingTranscriptions: string[] = [];
 for (const record of recordings) {
-    const cachedRecord = pathToCache + record.substring(0, record.lastIndexOf(".")) + ".txt";
-
-    if (!fs.existsSync(cachedRecord)) {
-        const audioFile : ReadStream = fs.createReadStream(pathToRecordings + record)
-        const transcription: Transcription = await chat.getOpenai().audio.transcriptions.create({
-            model: "whisper-1",
-            file: audioFile
-        })
-
-        fs.writeFileSync(cachedRecord, transcription.text);
-    }
-
-    recordingTranscriptions.push(removeExtension(record) + ': ' + fs.readFileSync(cachedRecord, 'utf8'));
+    recordingTranscriptions.push(removeExtension(record) + ': ' + fileAnalyzer.read(pathToRecordings, record));
 }
 
 const result: string = await chat.send([
@@ -32,15 +20,9 @@ const result: string = await chat.send([
 ]);
 
 console.log(result);
-console.log(extractDataFromTags(result));
+console.log(Poligon.extractDataFromTags(result));
 
-(new Poligon()).sendReport('MP3', extractDataFromTags(result));
-
-function extractDataFromTags(input: string): string | null {
-    const regex = /<RESULT>(.*?)<\/RESULT>/;
-    const match = input.match(regex);
-    return match ? match[1] : null;
-}
+(new Poligon()).sendReport('MP3', Poligon.extractDataFromTags(result));
 
 function removeExtension(fileName: string): string {
     const lastDotIndex = fileName.lastIndexOf('.');
