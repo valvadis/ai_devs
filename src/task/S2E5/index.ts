@@ -51,9 +51,7 @@ const result: string = await chat.send([
     { role: "user", content: answerQuestions(questions) }
 ]);
 
-const data = JSON.parse(<string>Poligon.extractDataFromTags(result));
-
-(new Poligon()).sendReport('arxiv', data);
+(new Poligon()).sendReport('arxiv', JSON.parse(<string>Poligon.extractDataFromTags(result)));
 
 function extractFilesFromHtml(html: string): string[] {
     const pngRegex = /<img[^>]+src="([^">]+\.png)"/g;
