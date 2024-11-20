@@ -1,7 +1,7 @@
 import fs from "fs";
 import { Buffer } from "buffer";
 import { Chat } from "../../service/chat.js";
-import { findLocationOnMap } from "../7/prompt.js";
+import { findLocationOnMap } from "./prompt.js";
 import {Config} from "../../service/config.js";
 
 const chat = new Chat();

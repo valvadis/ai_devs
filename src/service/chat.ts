@@ -1,12 +1,13 @@
 import OpenAI from "openai";
 import {ChatCompletion, ChatCompletionMessageParam} from "openai/src/resources/chat/completions";
+import {CreateEmbeddingResponse} from "openai/src/resources/embeddings";
 
 export class Chat {
     protected openai = new OpenAI();
 
     public async send(messages: ChatCompletionMessageParam[]): Promise<string> {
         const completion: ChatCompletion = await this.openai.chat.completions.create({
-            model: "gpt-4o",
+            model: "gpt-4o-mini",
             messages: messages,
         });
 
@@ -17,8 +18,14 @@ export class Chat {
         return completion.choices[0].message.content;
     }
 
-    public getOpenai(): OpenAI {
-        return this.openai;
+    public async vector(message: string): Promise<number[]> {
+        const embedding: CreateEmbeddingResponse = await this.openai.embeddings.create({
+            model: "text-embedding-3-small",
+            input: message,
+            encoding_format: "float",
+        });
+
+        return embedding.data[0].embedding;
     }
 }
 

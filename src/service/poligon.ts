@@ -1,7 +1,7 @@
 import axios, {AxiosError, AxiosResponse} from 'axios';
 import {Config} from "./config.js";
 
-export class Message {
+class Message {
     public task: string
     public apikey: string
     public answer: string[]

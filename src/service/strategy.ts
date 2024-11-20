@@ -11,7 +11,6 @@ interface FormatStrategy {
 
 class TextFormat implements FormatStrategy {
     public async read(path: string): Promise<string> {
-
         return new Promise((resolve, reject) => {
             fs.readFile(path, 'utf8', (err, data) => {
                 if (err) {

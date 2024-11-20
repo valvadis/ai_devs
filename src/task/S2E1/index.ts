@@ -3,7 +3,7 @@ import { Config } from "../../service/config.js";
 import { Chat } from "../../service/chat.js";
 import { FileAnalyzer } from "../../service/strategy.js";
 import { Poligon } from "../../service/poligon.js";
-import { streetNameSearch } from "../6/prompt.js";
+import { streetNameSearch } from "./prompt.js";
 
 const chat = new Chat();
 const fileAnalyzer = new FileAnalyzer();
