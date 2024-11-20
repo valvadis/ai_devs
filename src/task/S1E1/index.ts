@@ -7,7 +7,7 @@ const chat = new Chat();
 const endpoint = Config.get('xyz');
 
 const question: string = await axios.get(endpoint)
-    .then(({data}: AxiosResponse) => {
+    .then(({ data }: AxiosResponse) => {
         return chat.send([
             { role: "system", content: askAboutQuestion },
             { role: "user", content: data }
@@ -27,6 +27,6 @@ axios({
     url: endpoint,
     data: { username: 'tester', password: '574e112a', answer: answer },
     headers: { "Content-Type": "multipart/form-data" },
-}).then(({data}: AxiosResponse) => {
+}).then(({ data }: AxiosResponse) => {
     console.log(data);
 })

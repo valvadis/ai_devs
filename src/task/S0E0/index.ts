@@ -17,7 +17,7 @@ const message = new Message(
 )
 
 axios.post(destination, message)
-  .then(({data}: AxiosResponse) => {
+  .then(({ data }: AxiosResponse) => {
       console.log('Response:', data);
   })
   .catch((error: string) => {
