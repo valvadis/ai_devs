@@ -1,3 +1,5 @@
+import {Config} from "./config.js";
+
 export class Message {
     public msgID: number
     public text: string
@@ -5,6 +7,16 @@ export class Message {
     constructor(msgID: number, text: string) {
         this.msgID = msgID
         this.text = text
+    }
+}
+
+export class Database {
+    public task: string = 'database'
+    public apikey: string = Config.get('auth_token')
+    public query: string
+
+    constructor(query: any) {
+        this.query = query
     }
 }
 

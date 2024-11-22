@@ -1,10 +1,9 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import { Config } from "../../service/config.js";
 import { Chat } from "../../service/chat.js";
+import { Poligon } from "../../service/poligon.js";
 import { solveTheTest } from "./prompt.js";
 import { entry, file } from "./interface.js";
-
-import {Poligon} from "../../service/poligon.js";
 
 const chat = new Chat();
 const domain: string = Config.get('centrala');
@@ -15,6 +14,9 @@ const file: file = await axios.get(source)
     .then(({ data }: AxiosResponse) => {
         return data;
     })
+    .catch((error: AxiosError) => {
+        console.error('Error:', error.message);
+    });
 
 file.apikey = apikey;
 

@@ -1,5 +1,6 @@
 {
   "auth_token": "",
+  "neo4j_password": "",
   "poligon": "",
   "xyz": "",
   "centrala": ""

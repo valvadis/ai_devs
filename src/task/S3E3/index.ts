@@ -2,23 +2,14 @@ import { Poligon } from "../../service/poligon.js";
 import { Config } from "../../service/config.js";
 import axios, { AxiosResponse } from "axios";
 import { Chat } from "../../service/chat.js";
+import { Database } from "../../service/model.js";
 import { prepareQuery } from "./prompt.js";
 
 const chat = new Chat();
 const database = Config.get('centrala') + "/apidb";
 
-class Request {
-    public task: string = 'database'
-    public apikey: string = Config.get('auth_token')
-    public query: string
-
-    constructor(query: any) {
-        this.query = query
-    }
-}
-
 const tables: string[] = [];
-await axios.post(database, new Request('show tables'))
+await axios.post(database, new Database('show tables'))
     .then(({ data: { reply } }: AxiosResponse) => {
         for (const value of reply) {
             tables.push(value['Tables_in_banan']);
