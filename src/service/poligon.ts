@@ -14,25 +14,26 @@ export class Message {
 }
 
 export class Poligon {
-    public sendReport(task: string, request: any): void {
+    public async sendReport(task: string, request: any): Promise<string> {
         const message: Message = new Message(
             task,
             Config.get('auth_token'),
             request
         )
 
-        axios.post(Config.getReportUrl(), message)
+        return axios.post(Config.getReportUrl(), message)
             .then(({data}: AxiosResponse) => {
                 console.log('Response:', data);
+                return data;
             })
             .catch((error: AxiosError) => {
                 console.error('Error:', error.message);
-                console.error('Error:', error.response?.data);
+                return error.message;
             });
     }
 
-    public static extractDataFromTags(input: string): string | null {
-        const regex: RegExp = /<RESULT>(.*?)<\/RESULT>/s;
+    public static extractDataFromTags(input: string, tag: string = 'RESULT'): string | null {
+        const regex: RegExp = new RegExp(`<${tag}>(.*?)</${tag}>`, 's');
         const match: string[]|null = input.match(regex);
 
         return match ? match[1].trim() : null;

@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { Chat } from "../../service/chat.js";
-import { Message } from './model.js';
+import { Message } from '../../service/model.js';
 import { answerPrompt } from "./prompt.js";
 import { Config } from "../../service/config.js";
 
