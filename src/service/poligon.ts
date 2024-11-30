@@ -24,7 +24,7 @@ export class Poligon {
         return axios.post(Config.getReportUrl(), message)
             .then(({data}: AxiosResponse) => {
                 console.log('Response:', data);
-                return data;
+                return data.message;
             })
             .catch((error: AxiosError) => {
                 console.error('Error:', error.response);
