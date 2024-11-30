@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import { Config } from '../../service/config.js';
 import { Message } from '../../service/poligon.js';
 
@@ -9,6 +9,9 @@ const result: string[] = await axios.get(source)
     .then((response: AxiosResponse) => {
         return response.data.trim().split('\n')
     })
+    .catch((error: AxiosError) => {
+        console.error('Error:', error.response);
+    });
 
 const message = new Message(
     'POLIGON',

@@ -1,6 +1,4 @@
-export const categorizeFile = (text: string) => `
-    ${text}
-
+export const categorizeFile = `
     <rules>
         - ONLY three categories from information section are allowed.
         - Response MUST contain only one word without any additional description.
@@ -16,6 +14,6 @@ export const categorizeFile = (text: string) => `
     </information>
     
     <objective>
-        Assign a cateogry to the given text.
+        Assign a category to the inputs provided by users.
     </objective>
 `;

@@ -18,7 +18,8 @@ for (const file of fs.readdirSync(pathToFiles)) {
     const text = await fileAnalyzer.read(pathToFiles, file);
 
     const result: string = await chat.send([
-        { role: "system", content: categorizeFile(text) }
+        { role: "system", content: categorizeFile },
+        { role: "user", content: text }
     ]);
 
     if (result.toUpperCase() === 'PEOPLE') {

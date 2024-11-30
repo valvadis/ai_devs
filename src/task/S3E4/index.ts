@@ -3,8 +3,8 @@ import { Config } from "../../service/config.js";
 import { Chat } from "../../service/chat.js";
 import { Query } from "../../service/model.js";
 import { getQuery } from "./prompt.js";
-import axios, {AxiosError, AxiosResponse} from "axios";
-import {ChatCompletionMessageParam} from "openai/src/resources/chat/completions";
+import axios, { AxiosError, AxiosResponse } from "axios";
+import { ChatCompletionMessageParam } from "openai/src/resources/chat/completions";
 
 const chat: Chat = new Chat();
 const peopleEndpoint = Config.get('centrala') + '/people';

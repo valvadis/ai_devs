@@ -25,7 +25,7 @@ const answer: number = Number(chat.send([
 axios({
     method: "post",
     url: endpoint,
-    data: { username: 'tester', password: '574e112a', answer: answer },
+    data: { username: 'tester', password: '574e112a', answer: answer }, // password is compromised ;)
     headers: { "Content-Type": "multipart/form-data" },
 }).then(({ data }: AxiosResponse) => {
     console.log(data);

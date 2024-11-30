@@ -1,9 +1,9 @@
 import OpenAI from "openai";
-import fs, {ReadStream} from "fs";
-import {Transcription} from "openai/src/resources/audio/transcriptions";
-import {Buffer} from "buffer";
-import {ChatCompletion} from "openai/src/resources/chat/completions";
-import {Config} from "./config.js";
+import fs, { ReadStream } from "fs";
+import { Transcription } from "openai/src/resources/audio/transcriptions";
+import { Buffer } from "buffer";
+import { ChatCompletion } from "openai/src/resources/chat/completions";
+import { Config } from "./config.js";
 
 interface FormatStrategy {
     read(path: string): Promise<string>;

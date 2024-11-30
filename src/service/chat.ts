@@ -7,7 +7,7 @@ export class Chat {
 
     public async send(messages: ChatCompletionMessageParam[]): Promise<string> {
         const completion: ChatCompletion = await this.openai.chat.completions.create({
-            model: "gpt-4o",
+            model: "gpt-4o-mini",
             messages: messages,
         });
 

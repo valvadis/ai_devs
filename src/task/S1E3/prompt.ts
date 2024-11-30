@@ -12,8 +12,8 @@ export const solveTheTest: string = `
     </rules>
 
     <information>
-    - The file in some test data contains a "test" field with "q" (question) and "a" (answer) fields.
-        Your answers on that questions MUST BE put into the "a" field.
+        - The file in some test data contains a "test" field with "q" (question) and "a" (answer) fields.
+            Your answers on that questions MUST BE put into the "a" field.
     </information>
    
 `
